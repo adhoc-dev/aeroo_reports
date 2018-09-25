@@ -55,7 +55,8 @@ class MailTemplate(models.Model):
                     lang=template._context.get('lang'))
             for field in fields:
                 Template = Template.with_context(safe=field in {'subject'})
-                generated_field_values = Template.render_template(
+                generated_field_values = Template.with_context(
+                    mail_debrand=True).render_template(
                     getattr(template, field), template.model, template_res_ids,
                     post_process=(field == 'body_html'))
                 for res_id, field_value in generated_field_values.items():
